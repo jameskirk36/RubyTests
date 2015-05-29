@@ -1,13 +1,21 @@
+require_relative "addition_op"
+
 class MathParser
-  def self.is_addition(s)
-    s.include? "a"
+
+  def self.extract_lhs(s)
+    s[0]
+  end
+
+  def self.extract_rhs(s)
+    s[2]
   end
 
   def self.parse(s)
-    if is_addition(s)
-      lhs = s[0]
-      rhs = s[2]
-      lhs.to_i + rhs.to_i
+    if AdditionOp.is_addition(s)
+      lhs = extract_lhs(s)
+      rhs = extract_rhs(s)
+      op = AdditionOp.new(lhs, rhs)
+      op.evaluate
     else
       s.to_i
     end
