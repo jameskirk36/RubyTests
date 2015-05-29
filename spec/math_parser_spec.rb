@@ -9,4 +9,12 @@ describe "math_parser" do
     result = MathParser.parse("4")
     expect(result).to eq(4)
   end
+  it "should parse a simple addition" do
+    result = MathParser.parse("3a4")
+    expect(result).to eq(7)
+  end
+  it "should parse a different simple addition" do
+    result = MathParser.parse("4a4")
+    expect(result).to eq(8)
+  end
 end
