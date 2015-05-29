@@ -5,7 +5,7 @@ class MultiplicationOp
   end
 
   def evaluate
-    @lhs.to_i * @rhs.to_i
+    @lhs.evaluate * @rhs.evaluate
   end
 
   def self.get_mapped_value
