@@ -1,8 +1,9 @@
 require_relative "addition_op"
+require_relative "multiplication_op"
 require_relative "number_value"
 
 class MathParser
-  @valid_operator_regex = /[#{AdditionOp.get_mapped_value}]/
+  @valid_operator_regex = /[#{AdditionOp.get_mapped_value}#{MultiplicationOp.get_mapped_value}]/
 
   def self.extract_lhs(str, split_pos)
     str[0..split_pos-1]
@@ -27,15 +28,24 @@ class MathParser
     op.nil? == false
   end
 
+  def self.create_expression_for(op, lhs, rhs)
+    case op
+    when AdditionOp.get_mapped_value
+      expr = AdditionOp.new(lhs, rhs)
+    when MultiplicationOp.get_mapped_value
+      expr = MultiplicationOp.new(lhs, rhs)
+    end
+  end
+
   def self.parse(str)
     op = find_next_operator(str)
     if found_operator?(op)
       op_position = get_operator_position(op, str)
-      if AdditionOp.is_addition?(op)
-        lhs = extract_lhs(str, op_position)
-        rhs = extract_rhs(str, op_position)
-        expr = AdditionOp.new(lhs, rhs)
-      end
+
+      lhs = extract_lhs(str, op_position)
+      rhs = extract_rhs(str, op_position)
+
+      expr = create_expression_for(op, lhs, rhs)
     else
       expr = NumberValue.new(str)
     end
