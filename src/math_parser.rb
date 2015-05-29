@@ -2,23 +2,38 @@ require_relative "addition_op"
 require_relative "number_value"
 
 class MathParser
+  @valid_operators = /[#{AdditionOp.get_mapped_value}]/
 
-  def self.extract_lhs(str, i)
-    str[0..i-1]
+  def self.extract_lhs(str, split_pos)
+    str[0..split_pos-1]
   end
 
-  def self.extract_rhs(str, i)
-    str[i+1..-1]
+  def self.extract_rhs(str, split_pos)
+    str[split_pos+1..-1]
+  end
+
+  def self.find_next_operator(str)
+    match = str.match(@valid_operators)
+    if match.nil? == false && match.length > 0 
+      split_char = match[0]
+    end
+  end
+
+  def self.get_operator_position(op_char, str)
+    str.index(op_char)
+  end
+
+  def self.found_operator(op_char)
+    op_char.nil? == false
   end
 
   def self.parse(str)
-    match = str.match(/[a]/)
-    if match.nil? == false && match.length > 0 
-      split_char = match[0]
-      split_pos = str.index(split_char)
-      if AdditionOp.is_addition(split_char)
-        lhs = extract_lhs(str, split_pos)
-        rhs = extract_rhs(str, split_pos)
+    op_char = find_next_operator(str)
+    if found_operator(op_char)
+      op_position = get_operator_position(op_char, str)
+      if AdditionOp.is_addition(op_char)
+        lhs = extract_lhs(str, op_position)
+        rhs = extract_rhs(str, op_position)
         expr = AdditionOp.new(lhs, rhs)
       end
     else
