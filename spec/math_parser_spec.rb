@@ -13,4 +13,7 @@ describe "math_parser" do
   it "should parse a different simple addition" do
     expect(MathParser.parse("4a4")).to eq(8)
   end
+  it "should parse a large addition" do
+    expect(MathParser.parse("34a4")).to eq(38)
+  end
 end
