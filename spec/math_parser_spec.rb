@@ -1,19 +1,16 @@
 require_relative "../src/math_parser"
 
 describe "math_parser" do
+
   it "should parse a single value" do
     expect(MathParser.parse("3")).to eq(3)
   end
-  it "should parse a different single value" do
-    expect(MathParser.parse("4")).to eq(4)
-  end
-  it "should parse a simple addition" do
+
+  it "should parse an expression with a single addition operator" do
     expect(MathParser.parse("3a4")).to eq(7)
   end
-  it "should parse a different simple addition" do
-    expect(MathParser.parse("4a4")).to eq(8)
-  end
-  it "should parse a large addition" do
-    expect(MathParser.parse("34a4")).to eq(38)
+
+  it "should parse an expression with a single addition operator and large operands" do
+    expect(MathParser.parse("10a20")).to eq(30)
   end
 end
