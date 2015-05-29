@@ -1,23 +1,24 @@
 require_relative "addition_op"
+require_relative "number_value"
 
 class MathParser
 
-  def self.extract_lhs(s)
-    s[0]
+  def self.extract_lhs(expr)
+    expr[0]
   end
 
-  def self.extract_rhs(s)
-    s[2]
+  def self.extract_rhs(expr)
+    expr[2]
   end
 
-  def self.parse(s)
-    if AdditionOp.is_addition(s)
-      lhs = extract_lhs(s)
-      rhs = extract_rhs(s)
+  def self.parse(expr)
+    lhs = extract_lhs(expr)
+    rhs = extract_rhs(expr)
+    if AdditionOp.is_addition(expr)
       op = AdditionOp.new(lhs, rhs)
-      op.evaluate
     else
-      s.to_i
+      op = NumberValue.new(expr)
     end
+    op.evaluate
   end
 end
