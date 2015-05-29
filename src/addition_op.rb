@@ -4,7 +4,7 @@ class AdditionOp
     @rhs = rhs
   end
 
-  def self.is_addition(str)
+  def self.is_addition?(str)
     str.include? get_mapped_value
   end
 
