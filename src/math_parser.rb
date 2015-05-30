@@ -1,13 +1,8 @@
-require_relative "addition_op"
-require_relative "multiplication_op"
 require_relative "number_value"
+require_relative "expression_factory"
 
 class MathParser
-  @@valid_operator_regex = /[#{AdditionOp.char}#{MultiplicationOp.char}]/
-
-  def initialize(expression_factory)
-    @expression_factory = expression_factory
-  end
+  @@valid_operator_regex = /[#{ExpressionFactory.get_supported_operators}]/
 
   def split_string_at(str, pos)
     lhs = str[0..pos-1]
@@ -37,7 +32,7 @@ class MathParser
     if valid_index?(index)
       lhs, rhs = split_string_at(str, index)
       operator = extract_operator_from(str, index)
-      expr = @expression_factory.create_expression(operator, recursive_parse(lhs), recursive_parse(rhs))
+      expr = ExpressionFactory.create_expression(operator, recursive_parse(lhs), recursive_parse(rhs))
     else
       expr = NumberValue.new(str.to_i)
     end

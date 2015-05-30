@@ -1,10 +1,9 @@
 require_relative "../src/math_parser"
-require_relative "../src/expression_factory"
 
 describe "math_parser" do
 
   before do
-    @parser = MathParser.new(ExpressionFactory.new)
+    @parser = MathParser.new
   end
 
   it "should parse a single value" do
