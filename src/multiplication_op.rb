@@ -8,7 +8,7 @@ class MultiplicationOp
     @lhs.evaluate * @rhs.evaluate
   end
 
-  def self.get_mapped_value
+  def self.char
     "c"
   end
 end

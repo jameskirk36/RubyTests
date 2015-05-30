@@ -1,6 +1,6 @@
 class NumberValue
-  def initialize(str)
-    @val = str.to_i
+  def initialize(num)
+    @val = num
   end
 
   def evaluate

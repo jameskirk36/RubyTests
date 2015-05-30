@@ -8,7 +8,7 @@ class AdditionOp
     @lhs.evaluate + @rhs.evaluate
   end
 
-  def self.get_mapped_value
+  def self.char
     "a"
   end
 end

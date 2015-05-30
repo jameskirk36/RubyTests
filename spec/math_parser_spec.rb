@@ -1,9 +1,10 @@
 require_relative "../src/math_parser"
+require_relative "../src/expression_factory"
 
 describe "math_parser" do
 
   before do
-    @parser = MathParser.new
+    @parser = MathParser.new(ExpressionFactory.new)
   end
 
   it "should parse a single value" do
@@ -22,11 +23,4 @@ describe "math_parser" do
     expect(@parser.parse("2c4")).to eq(8)
   end
 
-  it "should parse an expression with two addition operators" do
-    expect(@parser.parse("3a4a2")).to eq(9)
-  end
-
-  it "should parse two operators" do
-    expect(@parser.parse("3a2c4")).to eq(20)
-  end
 end

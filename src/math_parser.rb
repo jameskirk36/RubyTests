@@ -3,7 +3,12 @@ require_relative "multiplication_op"
 require_relative "number_value"
 
 class MathParser
-  @@valid_operator_regex = /[#{AdditionOp.get_mapped_value}#{MultiplicationOp.get_mapped_value}]/
+  @@valid_operator_regex = /[#{AdditionOp.char}#{MultiplicationOp.char}]/
+
+  def initialize(expression_factory)
+    @expression_factory = expression_factory
+  end
+
   def split_string_at(str, pos)
     lhs = str[0..pos-1]
     rhs = str[pos+1..-1]
@@ -22,15 +27,6 @@ class MathParser
     str[index]
   end
 
-  def create_expression_tree(op, lhs, rhs)
-    case op
-    when AdditionOp.get_mapped_value
-      expr = AdditionOp.new(lhs, rhs)
-    when MultiplicationOp.get_mapped_value
-      expr = MultiplicationOp.new(lhs, rhs)
-    end
-  end
-
   def parse(str)
     expr = recursive_parse(str)
     expr.evaluate unless expr.nil?
@@ -41,9 +37,9 @@ class MathParser
     if valid_index?(index)
       lhs, rhs = split_string_at(str, index)
       operator = extract_operator_from(str, index)
-      expr = create_expression_tree(operator, recursive_parse(lhs), recursive_parse(rhs))
+      expr = @expression_factory.create_expression(operator, recursive_parse(lhs), recursive_parse(rhs))
     else
-      expr = NumberValue.new(str)
+      expr = NumberValue.new(str.to_i)
     end
   end
 end
