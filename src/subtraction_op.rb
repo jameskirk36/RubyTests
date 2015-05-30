@@ -9,6 +9,6 @@ class SubtractionOp
   end
 
   def self.char
-    "b"
+    "-"
   end
 end

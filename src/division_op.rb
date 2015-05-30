@@ -9,6 +9,6 @@ class DivisionOp
   end
 
   def self.char
-    "d"
+    "/"
   end
 end

@@ -2,7 +2,12 @@ require_relative "number_value"
 require_relative "expression_factory"
 
 class MathParser
-  @@valid_operator_regex = /[#{ExpressionFactory.get_supported_operators}]/
+
+  def initialize(mappings)
+    @mappings = mappings
+    mapped_operators = ExpressionFactory.get_supported_operators.map { |op| mappings.key(op) }
+    @valid_operator_regex = /[#{Regexp.escape(mapped_operators.join)}]/
+  end
 
   def split_string_at(str, pos)
     lhs = str[0..pos-1]
@@ -11,7 +16,7 @@ class MathParser
   end
 
   def find_next_operator_index(str)
-    str.rindex(@@valid_operator_regex)
+    str.rindex(@valid_operator_regex)
   end
 
   def valid_index?(index)
@@ -19,7 +24,7 @@ class MathParser
   end
 
   def extract_operator_from(str, index)
-    str[index]
+    @mappings[str[index]]
   end
 
   def parse(str)

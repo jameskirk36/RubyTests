@@ -6,7 +6,7 @@ require_relative "subtraction_op"
 class ExpressionFactory
 
   def self.get_supported_operators
-    "#{AdditionOp.char}#{SubtractionOp.char}#{MultiplicationOp.char}#{DivisionOp.char}"
+    [AdditionOp.char,SubtractionOp.char,MultiplicationOp.char,DivisionOp.char]
   end
 
   def self.create_expression(operator, lhs, rhs)

@@ -3,7 +3,13 @@ require_relative "../src/math_parser"
 describe "math_parser" do
 
   before do
-    @parser = MathParser.new
+    mappings = {
+      "a" => "+",
+      "b" => "-",
+      "c" => "*",
+      "d" => "/"
+    }
+    @parser = MathParser.new(mappings)
   end
 
   it "should parse two operators" do

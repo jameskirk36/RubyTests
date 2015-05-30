@@ -9,6 +9,6 @@ class AdditionOp
   end
 
   def self.char
-    "a"
+    "+"
   end
 end

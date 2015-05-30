@@ -9,7 +9,7 @@ class MultiplicationOp
   end
 
   def self.char
-    "c"
+    "*"
   end
 end
 
