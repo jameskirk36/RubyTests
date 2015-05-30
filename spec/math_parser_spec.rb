@@ -3,13 +3,14 @@ require_relative "../src/math_parser"
 describe "math_parser" do
 
   before do
-    operator_mappings = {
+    mappings = {
       "-" => "-",
       "+" => "+",
       "*" => "*",
       "/" => "/"
     }
-    @parser = MathParser.new(operator_mappings)
+    @parser = MathParser.new
+    @parser.provide_mappings(mappings)
   end
 
   it "should parse a single value" do

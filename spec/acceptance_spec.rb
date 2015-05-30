@@ -9,7 +9,8 @@ describe "math_parser" do
       "c" => "*",
       "d" => "/"
     }
-    @parser = MathParser.new(mappings)
+    @parser = MathParser.new
+    @parser.provide_mappings(mappings)
   end
 
   it "should parse two operators" do

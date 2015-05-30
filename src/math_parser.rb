@@ -3,7 +3,7 @@ require_relative "expression_factory"
 
 class MathParser
 
-  def initialize(mappings)
+  def provide_mappings(mappings)
     @mappings = mappings
     mapped_operators = ExpressionFactory.get_supported_operators.map { |op| mappings.key(op) }
     @valid_operator_regex = /[#{Regexp.escape(mapped_operators.join)}]/
