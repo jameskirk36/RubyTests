@@ -1,5 +1,6 @@
 require_relative "../src/multiplication_op"
 require_relative "../src/addition_op"
+require_relative "../src/division_op"
 require_relative "../src/number_value"
 
 describe "Basic arithmetic" do
@@ -13,5 +14,8 @@ describe "Basic arithmetic" do
   end
   it "should correctly evaluate multiplication" do
     expect(MultiplicationOp.new(num(2), num(2)).evaluate).to eq(4)
+  end
+  it "should correctly evaluate division" do
+    expect(DivisionOp.new(num(4), num(2)).evaluate).to eq(2)
   end
 end
