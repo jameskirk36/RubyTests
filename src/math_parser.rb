@@ -1,89 +1,72 @@
-require_relative "number_value"
 require_relative "expression_factory"
+require_relative "bracket_extractor"
 
 class MathParser
-
-  def provide_mappings(mappings)
-    @mappings = mappings
-    mapped_operators = ExpressionFactory.get_supported_operators.map { |op| mappings.key(op) }
-    @valid_operator_regex = /[#{Regexp.escape(mapped_operators.join)}]/
-    @bracket_open_char = mappings.key("(")
-    @bracket_close_char = mappings.key(")")
+  def initialize
+    @bracket_extractor = BracketExtractor.new
+    @expression_factory = ExpressionFactory.new
   end
 
-  def split_string_at(str, pos)
-    lhs = str[0..pos-1]
-    rhs = str[pos+1..-1]
+  def setup_mappings(mappings)
+    @mappings = mappings
+    mapped_operators = @expression_factory.get_supported_operators.map { |op| mappings.key(op) }
+    @valid_operator_regex = /[#{Regexp.escape(mapped_operators.join)}]/
+    @bracket_extractor.set_bracket_chars(mappings.key("("), mappings.key(")"))
+  end
+
+  def split_string_at(expr, pos)
+    lhs = expr[0..pos-1]
+    rhs = expr[pos+1..-1]
     return lhs, rhs
   end
 
-  def find_next_operator_index(str)
-    str.rindex(@valid_operator_regex)
+  def find_next_operator_index(expr)
+    expr.rindex(@valid_operator_regex)
   end
 
   def valid_index?(index)
     index.nil? == false
   end
 
-  def extract_operator_from(str, index)
-    @mappings[str[index]]
-  end
-
-  def find_open_bracket_index(str)
-    str.index(@bracket_open_char)
-  end
-  def find_close_bracket_index(str)
-    str.index(@bracket_close_char)
-  end
-
-  def in_inner_section?(open_pos, close_pos)
-    close_pos < open_pos
-  end
-
-  def extract_innermost_bracket_section(str)
-    start_pos = str.rindex(@bracket_open_char)
-    end_pos = str.index(@bracket_close_char)
-    if start_pos.nil? || end_pos.nil?
-      str
-    else
-      str[start_pos..end_pos]
-    end
+  def extract_operator_from(expr, index)
+    @mappings[expr[index]]
   end
 
   def remove_brackets(bracket_section)
     bracket_section[1..bracket_section.length-2]
   end
 
-  def has_brackets?(str)
-    str.include? @bracket_open_char
+  def replace_section_with_evaluated_form(section, tree, expr)
+    expr.gsub(section, tree.evaluate.to_s)
   end
 
-  def recursive_bracket_expansion(str)
-    if has_brackets?(str)
-      bracket_section = extract_innermost_bracket_section(str)
-      expr = recursive_parse(remove_brackets(bracket_section))
-      str = str.gsub(bracket_section, expr.evaluate.to_s)
-      recursive_bracket_expansion(str) 
+
+  def recursive_bracket_evaluation(expr)
+    if @bracket_extractor.has_brackets?(expr)
+      section = @bracket_extractor.extract_innermost_bracket_section_from(expr)
+      tree = build_expression_tree_from(remove_brackets(section))
+      expr = replace_section_with_evaluated_form(section, tree, expr)
+      recursive_bracket_evaluation(expr) 
     else
-      str
+      expr
     end
   end
 
-  def parse(str)
-    str = recursive_bracket_expansion(str)
+  def evaluate(expr)
+    expr = recursive_bracket_evaluation(expr)
 
-    expr = recursive_parse(str)
-    expr.evaluate unless expr.nil?
+    expr_tree = build_expression_tree_from(expr)
+    expr_tree.evaluate unless expr_tree.nil?
   end
 
-  def recursive_parse(str)
-    index = find_next_operator_index(str)
+  def build_expression_tree_from(expr)
+    index = find_next_operator_index(expr)
     if valid_index?(index)
-      lhs, rhs = split_string_at(str, index)
-      operator = extract_operator_from(str, index)
-      expr = ExpressionFactory.create_expression(operator, recursive_parse(lhs), recursive_parse(rhs))
+      lhs, rhs = split_string_at(expr, index)
+      operator = extract_operator_from(expr, index)
+      @expression_factory.create_expression(operator, build_expression_tree_from(lhs), build_expression_tree_from(rhs))
     else
-      expr = NumberValue.new(str.to_i)
+      @expression_factory.create_number_value(expr.to_i)
     end
   end
 end
