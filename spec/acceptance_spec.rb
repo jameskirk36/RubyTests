@@ -1,6 +1,7 @@
+require 'spec_helper'
 require_relative "../src/math_parser"
 
-describe "math_parser" do
+describe "Math Parser Acceptance tests" do
 
   before do
     mappings = {

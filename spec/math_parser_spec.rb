@@ -1,6 +1,6 @@
 require_relative "../src/math_parser"
 
-describe "math_parser" do
+describe "Math Parser unmapped operators" do
 
   before do
     mappings = {
@@ -23,7 +23,7 @@ describe "math_parser" do
     expect(@parser.evaluate("3+4")).to eq(7)
   end
 
-  it "should evaluate an expression with a single addition operator and large operands" do
+  it "should evaluate an expression with large operands" do
     expect(@parser.evaluate("10+20")).to eq(30)
   end
 

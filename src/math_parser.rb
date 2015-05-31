@@ -3,6 +3,7 @@ require_relative "bracket_extractor"
 require_relative "string_utils"
 
 class MathParser
+
   def initialize
     @bracket_extractor = BracketExtractor.new
     @expression_factory = ExpressionFactory.new
@@ -21,6 +22,8 @@ class MathParser
     expr_tree = build_expression_tree_from(expr)
     expr_tree.evaluate unless expr_tree.nil?
   end
+
+  private
 
   def recursive_bracket_evaluation(expr)
     if @bracket_extractor.has_brackets?(expr)
@@ -51,4 +54,5 @@ class MathParser
   def extract_operator_from(expr, index)
     @mappings[expr[index]]
   end
+
 end
