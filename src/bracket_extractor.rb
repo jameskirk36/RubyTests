@@ -9,6 +9,10 @@ class BracketExtractor
     expr.include? @bracket_open_char
   end
 
+  def remove_brackets(bracket_section)
+    bracket_section[1..bracket_section.length-2]
+  end
+
   def extract_innermost_bracket_section_from(expr)
     start_pos = expr.rindex(@bracket_open_char)
     end_pos = expr.index(@bracket_close_char)
