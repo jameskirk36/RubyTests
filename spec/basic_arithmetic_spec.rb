@@ -1,8 +1,8 @@
-require_relative "../src/multiplication_op"
-require_relative "../src/addition_op"
-require_relative "../src/subtraction_op"
-require_relative "../src/division_op"
-require_relative "../src/number_value"
+require_relative "../src/operations/multiplication_op"
+require_relative "../src/operations/addition_op"
+require_relative "../src/operations/subtraction_op"
+require_relative "../src/operations/division_op"
+require_relative "../src/operations/number_value"
 
 describe "Basic arithmetic" do
 

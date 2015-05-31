@@ -1,7 +1,7 @@
-require_relative "multiplication_op"
-require_relative "addition_op"
-require_relative "division_op"
-require_relative "subtraction_op"
+require_relative "operations/multiplication_op"
+require_relative "operations/addition_op"
+require_relative "operations/division_op"
+require_relative "operations/subtraction_op"
 
 class ExpressionFactory
 

@@ -1,6 +1,6 @@
 require_relative "expression_factory"
 require_relative "bracket_extractor"
-require_relative "string_utils"
+require_relative "utils/string_utils"
 
 class MathParser
 
