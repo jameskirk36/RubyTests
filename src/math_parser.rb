@@ -7,6 +7,8 @@ class MathParser
     @mappings = mappings
     mapped_operators = ExpressionFactory.get_supported_operators.map { |op| mappings.key(op) }
     @valid_operator_regex = /[#{Regexp.escape(mapped_operators.join)}]/
+    @bracket_start = mappings.key("(")
+    @bracket_end = mappings.key(")")
   end
 
   def split_string_at(str, pos)
@@ -27,7 +29,27 @@ class MathParser
     @mappings[str[index]]
   end
 
+  def extract_bracket_section(str)
+      start_bracket_index = str.index(@bracket_start)
+      end_bracket_index = str.index(@bracket_end)
+      str[start_bracket_index..end_bracket_index]
+  end
+
+  def remove_brackets(bracket_section)
+    bracket_section[1..bracket_section.length-2]
+  end
+
+  def has_brackets?(str)
+    str.include? @bracket_start
+  end
+
   def parse(str)
+    if has_brackets?(str)
+      bracket_section = extract_bracket_section(str)
+      expr = recursive_parse(remove_brackets(bracket_section))
+      str = str.gsub(bracket_section, expr.evaluate.to_s)
+    end
+
     expr = recursive_parse(str)
     expr.evaluate unless expr.nil?
   end

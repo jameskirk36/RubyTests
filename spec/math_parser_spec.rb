@@ -7,7 +7,9 @@ describe "math_parser" do
       "-" => "-",
       "+" => "+",
       "*" => "*",
-      "/" => "/"
+      "/" => "/",
+      "(" => "(",
+      ")" => ")"
     }
     @parser = MathParser.new
     @parser.provide_mappings(mappings)
@@ -27,6 +29,10 @@ describe "math_parser" do
 
   it "should parse an expression with a multiplication operator" do
     expect(@parser.parse("2*4")).to eq(8)
+  end
+
+  it "should evaluate an expression with brackets" do
+    expect(@parser.parse("3+(2*4)")).to eq(11)
   end
 
 end

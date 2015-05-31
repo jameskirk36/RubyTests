@@ -7,7 +7,9 @@ describe "math_parser" do
       "a" => "+",
       "b" => "-",
       "c" => "*",
-      "d" => "/"
+      "d" => "/",
+      "e" => "(",
+      "f" => ")"
     }
     @parser = MathParser.new
     @parser.provide_mappings(mappings)
@@ -21,5 +23,8 @@ describe "math_parser" do
   end
   it "should parse three operators" do
     expect(@parser.parse("500a10b66c32")).to eq(14208)
+  end
+  it "should parse expression with brackets" do
+    expect(@parser.parse("3ae4c66fb32")).to eq(235)
   end
 end
