@@ -35,4 +35,15 @@ describe "math_parser" do
     expect(@parser.parse("3+(2*4)")).to eq(11)
   end
 
+  it "should evaluate an expression with nested brackets" do
+    expect(@parser.parse("2+(3*(4+1))")).to eq(17)
+  end
+
+  it "should extract innermost bracket section 1" do
+    expect(@parser.extract_innermost_bracket_section("(inner)")).to eq("(inner)")
+  end
+
+  it "should extract innermost bracket section" do
+    expect(@parser.extract_innermost_bracket_section("((inner)outer)")).to eq("(inner)")
+  end
 end

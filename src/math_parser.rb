@@ -7,8 +7,8 @@ class MathParser
     @mappings = mappings
     mapped_operators = ExpressionFactory.get_supported_operators.map { |op| mappings.key(op) }
     @valid_operator_regex = /[#{Regexp.escape(mapped_operators.join)}]/
-    @bracket_start = mappings.key("(")
-    @bracket_end = mappings.key(")")
+    @bracket_open_char = mappings.key("(")
+    @bracket_close_char = mappings.key(")")
   end
 
   def split_string_at(str, pos)
@@ -29,10 +29,25 @@ class MathParser
     @mappings[str[index]]
   end
 
-  def extract_bracket_section(str)
-      start_bracket_index = str.index(@bracket_start)
-      end_bracket_index = str.index(@bracket_end)
-      str[start_bracket_index..end_bracket_index]
+  def find_open_bracket_index(str)
+    str.index(@bracket_open_char)
+  end
+  def find_close_bracket_index(str)
+    str.index(@bracket_close_char)
+  end
+
+  def in_inner_section?(open_pos, close_pos)
+    close_pos < open_pos
+  end
+
+  def extract_innermost_bracket_section(str)
+    start_pos = str.rindex(@bracket_open_char)
+    end_pos = str.index(@bracket_close_char)
+    if start_pos.nil? || end_pos.nil?
+      str
+    else
+      str[start_pos..end_pos]
+    end
   end
 
   def remove_brackets(bracket_section)
@@ -40,15 +55,22 @@ class MathParser
   end
 
   def has_brackets?(str)
-    str.include? @bracket_start
+    str.include? @bracket_open_char
+  end
+
+  def recursive_bracket_expansion(str)
+    if has_brackets?(str)
+      bracket_section = extract_innermost_bracket_section(str)
+      expr = recursive_parse(remove_brackets(bracket_section))
+      str = str.gsub(bracket_section, expr.evaluate.to_s)
+      recursive_bracket_expansion(str) 
+    else
+      str
+    end
   end
 
   def parse(str)
-    if has_brackets?(str)
-      bracket_section = extract_bracket_section(str)
-      expr = recursive_parse(remove_brackets(bracket_section))
-      str = str.gsub(bracket_section, expr.evaluate.to_s)
-    end
+    str = recursive_bracket_expansion(str)
 
     expr = recursive_parse(str)
     expr.evaluate unless expr.nil?

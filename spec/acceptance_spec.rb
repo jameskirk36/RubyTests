@@ -27,4 +27,7 @@ describe "math_parser" do
   it "should parse expression with brackets" do
     expect(@parser.parse("3ae4c66fb32")).to eq(235)
   end
+  it "should parse expression with nested brackets" do
+    expect(@parser.parse("3c4d2aee2a4c41fc4f")).to eq(990)
+  end
 end
